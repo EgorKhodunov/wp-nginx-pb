@@ -1,0 +1,24 @@
+---
+- name: Set persistent http_proxy 
+  ansible.builtin.template:
+    src: http_proxy.sh.j2
+    dest: /etc/profile.d/http_proxy.sh
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ensure dnf configured to use proxy
+  ansible.builtin.lineinfile:
+    state: present
+    path: /etc/dnf/dnf.conf
+    line: "proxy = {{ http_proxy }}"
+  when: ansible_os_family == 'RedHat'
+
+- name: Ensure apt configured to use proxy
+  ansible.builtin.template:
+    src: apt-proxy.conf.j2
+    dest: /etc/apt/apt.conf.d/proxy.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == 'Debian'

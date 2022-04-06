@@ -1,0 +1,23 @@
+---
+- name: Install Nginx package
+  ansible.builtin.dnf:
+    name: "{{ nginx_package }}"
+    state: present
+
+- name: Isntall PHP packages
+  ansible.builtin.dnf:
+    name: "{{ php_packages }}"
+    state: latest
+
+- name: set user variable in www.conf
+  ansible.builtin.replace:
+    path: "{{ php_fpm_config }}"
+    regexp: "^user = apache$"
+    replace: "user = nginx"
+
+- name: set group variable in www.conf
+  ansible.builtin.replace:
+    path: "{{ php_fpm_config }}"
+    regexp: "^group = apache$"
+    replace: "group = nginx"
+

@@ -1,0 +1,26 @@
+---
+
+- name: Allow zabbix-agent port in firewalld on RHEL8
+  ansible.posix.firewalld:
+    port: 10050/tcp
+    state: enabled
+    zone: public
+    permanent: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Restart firewalld on RHEL8
+  ansible.builtin.systemd:
+    name: firewalld
+    state: restarted
+    enabled: yes
+  changed_when: false
+  when: ansible_os_family == 'RedHat'
+
+- name: Allow zabbix-agent on Debian
+  community.general.ufw:
+    rule: allow
+    port: 10050
+    proto: tcp
+    src: "{{ zabbix_server }}"
+  when: ansible_os_family == 'Debian'
+

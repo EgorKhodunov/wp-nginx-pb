@@ -1,0 +1,47 @@
+---
+- name: Ensure Mariadb service is started and enabled
+  ansible.builtin.systemd:
+    name: "{{ mysql_daemon }}"
+    state: started
+    enabled: yes
+
+- name: Sets the root password
+  community.mysql.mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    login_unix_socket: "{{ mysql_socket }}"
+  ignore_errors: yes
+
+- name: Removes all anonymous user accounts
+  community.mysql.mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Removes the MySQL test database
+  community.mysql.mysql_db:
+    name: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+
+- name: Create custom MySQL database
+  community.mysql.mysql_db:
+    name: "{{ mysql_db }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create custom MySQL user
+  community.mysql.mysql_user:
+    name: "{{ mysql_user }}"
+    host: localhost
+    priv: "{{ mysql_db }}.*:ALL,GRANT"
+    password: "{{ mysql_password }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    
+

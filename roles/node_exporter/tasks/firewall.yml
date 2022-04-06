@@ -1,0 +1,24 @@
+---
+- name: Allow 9100 port on RHEL8 based OS
+  ansible.builtin.firewalld:
+    port: 9100/tcp
+    zone: public
+    state: enabled
+    permanent: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Restat Firewalld service
+  ansible.builtin.systemd:
+    name: firewalld
+    state: restarted
+  changed_when: false    
+  when: ansible_os_family == 'RedHat'
+
+
+- name: Allow 9100 port on Debian based OS
+  community.general.ufw:
+    port: 9100
+    proto: tcp
+    rule: allow
+    src: "{{ prometheus_server }}"
+  when: ansible_os_family == 'Debian'

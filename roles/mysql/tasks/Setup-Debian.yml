@@ -1,0 +1,15 @@
+---
+- name: Update apt cache 
+  apt: update_cache=yes
+  changed_when: False
+
+- name: Ensure MySQL Python libraries are installed.
+  apt:
+    name: "{{ mysql_python_package_debian }}"
+    state: present
+
+- name: Ensure MySQL packages are installed.
+  apt:
+    name: "{{ mysql_packages }}"
+    state: present
+  register: deb_mysql_install_packages 

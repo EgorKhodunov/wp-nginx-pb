@@ -1,0 +1,22 @@
+---
+- include_tasks: variables.yml
+
+- include_tasks: Setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include_tasks: Setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include_tasks: configure.yml
+
+- include_tasks: firewall.yml
+
+- name: Ensure PHP-FPM and Nginx are started and enabled
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  changed_when: false
+  with_items:
+    - "{{ php_fpm_daemon }}"
+    - "{{ nginx_daemon }}"

@@ -1,0 +1,21 @@
+---
+- name: Check if Node Exporter service config exists
+  ansible.builtin.stat:
+    path: /etc/systemd/system/node_exporter.service
+  register: nec
+
+- name: Copy Node Exporter service config
+  ansible.builtin.copy:
+    src: node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  when: not nec.stat.exists
+
+- name: Ensure that Node Exporter service is started and enabled
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    name: node_exporter
+    state: started
+    enabled: yes

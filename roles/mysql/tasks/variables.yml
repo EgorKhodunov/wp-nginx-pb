@@ -1,0 +1,8 @@
+---
+- name: Include RHEL8 specific variables
+  include_vars: "RedHat.yml"
+  when: ansible_os_family == 'RedHat'
+
+- name: Include Debian specific variables
+  include_vars: "Debian.yml"
+  when: ansible_os_family == 'Debian'

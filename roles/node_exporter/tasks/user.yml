@@ -1,0 +1,13 @@
+---
+- name: Ensure that node_exporter group exists
+  ansible.builtin.group:
+    name: node_exporter
+    state: present
+    system: yes
+
+- name: Ensure that node_exporter user exists
+  ansible.builtin.user:
+    name: node_exporter
+    system: yes
+    group: node_exporter
+    state: present

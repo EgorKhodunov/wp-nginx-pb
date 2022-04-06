@@ -1,0 +1,11 @@
+---
+- name: Install Nginx Package
+  ansible.builtin.apt:
+    name: "{{ nginx_package }}"
+    state: present
+
+- name: Install PHP packages
+  ansible.builtin.apt:
+    name: "{{ php_packages }}"
+    state: present
+

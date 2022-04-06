@@ -1,0 +1,2 @@
+---
+zabbix_agentd_template: rhel-zabbix_agentd.conf.j2

@@ -1,0 +1,10 @@
+---
+mysql_daemon: mariadb
+mysql_packages:
+  - mariadb
+  - mariadb-server
+  - mariadb-connector-c
+  - python3-PyMySQL
+  - perl-DBD-MySQL
+mysql_config_file: /etc/my.cnf
+mysql_socket: /var/lib/mysql/mysql.sock

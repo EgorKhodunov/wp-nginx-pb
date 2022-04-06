@@ -1,0 +1,33 @@
+server {
+
+	listen 80;
+	server_name {{ domain }};
+	
+	root {{ wordpress_path }};
+	index index.php;
+	
+	location / {
+	    autoindex on;
+	    try_files $uri $uri/ /index.php?$args;
+	}
+	
+	location ~ \.php$ {
+	    try_files $uri =404;
+	    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+	    fastcgi_pass unix:{{ php_fpm_socket }};
+	    fastcgi_index index.php;
+	    include fastcgi_params;
+	    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+	}
+
+	location ~ /\. {
+	    deny all;
+	}
+	
+	location = /basic_status {
+	    stub_status;
+	    allow 127.0.0.1;
+	    allow ::1;
+	    deny all;
+	}
+}

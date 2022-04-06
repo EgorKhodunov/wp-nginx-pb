@@ -1,0 +1,32 @@
+---
+- name: Check if Node Exporter already installed
+  ansible.builtin.stat:
+    path: /usr/bin/node_exporter
+  register: ne
+
+    #- name: Donload Node Exporter
+    #  ansible.builtin.get_url:
+    #    url: https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
+    #    dest: /tmp/node_exporter.tar.gz
+    #  when: not ne.stat.exists
+
+- name: Extract Node Exporter
+  ansible.builtin.unarchive:
+    src: https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
+    dest: /tmp/
+    remote_src: true
+    owner: node_exporter
+    group: node_exporter
+    mode: 0700
+  when: not ne.stat.exists
+
+- name: Copy Node Exporter binary
+  ansible.builtin.copy:
+    src: /tmp/node_exporter-1.3.1.linux-amd64/node_exporter
+    dest: /usr/bin/node_exporter
+    remote_src: true
+    owner: node_exporter
+    group: node_exporter
+    mode: 0711
+  when: not ne.stat.exists
+

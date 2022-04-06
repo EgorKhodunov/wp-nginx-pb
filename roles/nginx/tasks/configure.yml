@@ -1,0 +1,25 @@
+---
+- name: Copy nginx.conf from template
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_config_path }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy wordpress.conf form template
+  ansible.builtin.template:
+    src: wordpress.conf.j2
+    dest: "{{ nginx_wp_config_path }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable nginx config on Ubuntu
+  ansible.builtin.file:
+    src: "{{ nginx_wp_config_path }}"
+    dest: "{{ nginx_wp_enable_path }}"
+    owner: root
+    group: root
+    state: link
+  when: ansible_os_family == 'Debian'

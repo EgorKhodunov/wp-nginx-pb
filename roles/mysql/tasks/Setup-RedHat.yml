@@ -1,0 +1,7 @@
+---
+- name: Setup MySQL packages for RHEL8 based OS
+  ansible.builtin.dnf:
+    name: "{{ mysql_packages }}"
+    state: present
+
+  

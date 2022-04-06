@@ -1,0 +1,22 @@
+### New user ###
+pubkey_path: 
+username: 
+password:
+
+### HTTP Proxy ###
+http_proxy: 
+
+### MySQL ###  
+mysql_root_password: 
+mysql_db: 
+mysql_user: 
+mysql_password: 
+
+### Wordpress ###
+domain: 
+
+### Monitoring ###  
+zabbix_server: 
+prometheus_server: 
+
+

@@ -1,0 +1,23 @@
+---
+- hosts: srequest
+  become: yes
+  gather_facts: false
+  roles:
+    - python-raw
+
+- hosts: srequest
+  become: yes
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  vars_files:
+    - vault.yml
+  roles:
+    - http_proxy
+    - selinux
+    - ssh
+    - mysql
+    - nginx
+    - wordpress
+    - zabbix-agent
+    - node_exporter

@@ -1,0 +1,29 @@
+---
+- name: Check for Python
+  ansible.builtin.raw: ls /usr/bin/python3 && echo 1 || echo 0
+  changed_when: false
+  failed_when: false
+  args:
+    executable: /bin/bash
+  register: check_python
+
+- name: Dirty OS detection
+  ansible.builtin.raw: 'sed -n "s/^NAME=\"\(.*\)\"/\\1/p" /etc/os-release'
+  changed_when: false
+  args:
+    executable: /bin/bash
+  register: dirty_detect
+
+- name: Install python3 on RHEL8 based system
+  ansible.builtin.raw: dnf -y install python3
+  changed_when: false
+  args:
+    executable: /bin/bash
+  when: dirty_detect.stdout_lines[0] == 'AlmaLinux' and check_python.stdout_lines[1] == '0' 
+
+- name: Install python3 on Debian based system
+  ansible.builtin.raw: apt install -y python3
+  changed_when: false
+  args:
+    executable: /bin/bash
+  when: dirty_detect.stdout_lines[0] == 'Ubuntu' and check_python.stdout_lines[1] == '0' 
