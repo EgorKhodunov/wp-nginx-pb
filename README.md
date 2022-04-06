@@ -1,5 +1,5 @@
 # wp-nginx-pb
-Wordpress + monitoring Ansible playbook
+Wordpress + zabbix-agent + node_exporter Ansible playbook
 ### Usage
 1. Create vars/vault.yml using ansible-vault and add variables as in vars/example.yml
 ```bash
